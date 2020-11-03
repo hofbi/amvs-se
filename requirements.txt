@@ -1,0 +1,9 @@
+matplotlib
+defusedxml
+numpy
+black
+pylint
+cmake_format
+pandas
+scikit-learn
+tqdm

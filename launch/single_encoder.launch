@@ -1,0 +1,12 @@
+<launch>
+    <arg name="settings_file" default="settings.yml"/>
+    <arg name="settings_path" default="$(find single_encoder)/config/$(arg settings_file)"/>
+    <arg name="cbr_mode" default="false"/>
+    <arg name="qp" default="25"/>
+
+    <node name="single_encoder" pkg="single_encoder" type="single_encoder_node" output="screen">
+        <param name="cbr_mode" value="$(arg cbr_mode)"/>
+        <param name="qp" value="$(arg qp)"/>
+        <rosparam file="$(arg settings_path)" command="load"/>
+    </node>
+</launch>

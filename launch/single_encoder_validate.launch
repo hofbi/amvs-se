@@ -1,0 +1,16 @@
+<launch>
+    <arg name='bag_path' default=''/>
+    <arg name="settings_file" default="settings.yml"/>
+    <arg name="settings_path" default="$(find single_encoder)/config/$(arg settings_file)"/>
+    <arg name="cbr_mode" default="false"/>
+    <arg name="qp" default="25"/>
+    <arg name="pb_rate" default="0.5"/>
+
+    <node pkg="rosbag" type="play" name="replayer" args="$(arg bag_path) -r $(arg pb_rate)" required="true"/>
+
+    <include file="$(find single_encoder)/launch/single_encoder.launch">
+        <arg name='settings_path' value='$(arg settings_path)'/>
+        <arg name='cbr_mode' value='$(arg cbr_mode)'/>
+        <arg name="qp" value="$(arg qp)"/>
+    </include>
+</launch>

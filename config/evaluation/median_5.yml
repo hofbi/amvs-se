@@ -1,0 +1,21 @@
+image_params:
+  - topic: "/carla/ego_vehicle/camera/rgb/front/image_color"
+    bitrate: 1000
+    skip_frames: 0
+    width: 640
+    height: 480
+    chroma_drop: false
+    filter:
+      type: "none"
+      ksize: 1
+      sigma: 0.0
+  - topic: "/carla/ego_vehicle/camera/rgb/front/image_color"
+    bitrate: 1000
+    skip_frames: 0
+    width: 640
+    height: 480
+    chroma_drop: false
+    filter:
+      type: "median"
+      ksize: 5
+      sigma: 0.0

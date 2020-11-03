@@ -28,6 +28,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         VALIDATE_PYTHON: false # Already configured in make check
+        VALIDATE_ANSIBLE: false
 
   ros:
     runs-on: ubuntu-latest

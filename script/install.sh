@@ -15,6 +15,7 @@ echo "Install dependencies for $ROS_VERSION"
 
 # Video Codec
 sudo apt install -y \
+    python3-pip \
     libavcodec-dev \
     libavformat-dev \
     libswscale-dev \

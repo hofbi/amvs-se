@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if [ "$(
-    . /etc/os-release
-    echo "$VERSION_ID"
-)" = "20.04" ]; then
+# shellcheck disable=SC1091
+if [ "$(. /etc/os-release echo "$VERSION_ID")" = "20.04" ]; then
     ROS_VERSION='noetic'
     PYTHON_SUFFIX=3
 else
@@ -26,4 +24,4 @@ sudo apt install -y \
     libva-dev \
     nlohmann-json"$PYTHON_SUFFIX"-dev
 
-pip3 install -r ${SCRIPT_DIR}/../requirements.txt
+pip3 install -r "${SCRIPT_DIR}"/../requirements.txt

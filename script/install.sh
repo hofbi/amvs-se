@@ -2,8 +2,12 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Supported versions ['melodic', 'noetic']
 # shellcheck disable=SC1091
-if [ "$(. /etc/os-release echo "$VERSION_ID")" = "20.04" ]; then
+if [ "$(
+    . /etc/os-release
+    echo "$VERSION_ID"
+)" = "20.04" ]; then
     ROS_VERSION='noetic'
     PYTHON_SUFFIX=3
 else

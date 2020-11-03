@@ -59,7 +59,7 @@ def add_subplot(plot_id, data_key, json_data, label, unit):
             vqm_scores = [list(x) for x in zip(*element[data_key])]
             for idx, score in enumerate(vqm_scores):
                 average = statistics.mean(score) if score else 0
-                single_or_demux = "single" if idx is 0 else "demux"
+                single_or_demux = "single" if idx == 0 else "demux"
                 AVERAGE_VALUES[
                     "%d-%s-%s" % (element["encoderId"], data_key, single_or_demux)
                 ] = average

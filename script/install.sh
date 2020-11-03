@@ -27,6 +27,7 @@ sudo apt install -y \
     build-essential \
     libx264-dev \
     libva-dev \
+    ros-"$ROS_VERSION"-opencv-apps \
     nlohmann-json"$PYTHON_SUFFIX"-dev
 
 pip3 install -r "${SCRIPT_DIR}"/../requirements.txt

@@ -6,7 +6,7 @@ add_library(
 
 target_include_directories(
   statistics
-  PRIVATE include SYSTEM
+  PRIVATE include
   INTERFACE include)
 
 target_link_libraries(statistics PUBLIC filter_parameter)

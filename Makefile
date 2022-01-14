@@ -5,7 +5,7 @@ PY_FILES = $(call file_finder,-name "*.py")
 CPP_FILES = $(call file_finder,-regex '.*\.\(cpp\|hpp\|cu\|c\|h\)')
 SH_FILES = $(call file_finder,-name "*.sh")
 
-check: check_format pylint
+check: check_format flake8 pylint
 
 format:
 	$(PY_FILES) | xargs black
@@ -20,9 +20,13 @@ check_format:
 pylint:
 	$(PY_FILES) | xargs pylint --rcfile=.pylintrc
 
+flake8:
+	$(PY_FILES) | xargs flake8
+
 .PHONY: test
 test:
 	python3 -m unittest discover -s script/evaluation
+	python3 -m unittest discover -s script/cqp
 
 check_sh_format:
 	shfmt -d .

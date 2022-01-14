@@ -1,0 +1,23 @@
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND='noninteractive'
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+    wget \
+    libopencv-dev \
+    libavformat-dev \
+    libavcodec-dev \
+    libavdevice-dev \
+    libavutil-dev \
+    libavfilter-dev \
+    libswscale-dev \
+    libavresample-dev \
+    ffmpeg \
+    python3-pip \
+    p7zip-full && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install pandas numpy scikit-learn tqdm siti opencv-python
+
+WORKDIR /home

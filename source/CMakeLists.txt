@@ -6,7 +6,7 @@ add_subdirectory(mux)
 add_subdirectory(quality)
 add_subdirectory(statistics)
 
-# Executeables
+# Executables
 add_executable(
   single_encoder_node src/single_encoder_node.cpp src/single_encoder.cpp
                       include/single_encoder.h)

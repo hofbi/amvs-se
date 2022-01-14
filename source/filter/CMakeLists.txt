@@ -4,7 +4,7 @@ add_library(filter_parameter include/parameter/filter_parameter.h
 
 target_include_directories(
   filter_parameter
-  PRIVATE include/parameter SYSTEM
+  PRIVATE include/parameter
   INTERFACE include/parameter)
 
 # Filter Base
@@ -15,8 +15,8 @@ target_include_directories(
   filter_base
   PRIVATE include/base
   PRIVATE ${catkin_INCLUDE_DIRS} SYSTEM
-  INTERFACE include/base SYSTEM
-  INTERFACE ${catkin_INCLUDE_DIRS})
+  INTERFACE include/base
+  INTERFACE ${catkin_INCLUDE_DIRS} SYSTEM)
 
 # Filter Spatio-Temporal
 add_library(
@@ -26,7 +26,7 @@ add_library(
 
 target_include_directories(
   filter_spatio_temporal
-  PRIVATE include/spatio_temporal SYSTEM
+  PRIVATE include/spatio_temporal
   INTERFACE include/spatio_temporal)
 
 target_link_libraries(
@@ -40,7 +40,7 @@ add_library(filter_channel include/channel/channel_filter.h
 
 target_include_directories(
   filter_channel
-  PRIVATE include/channel SYSTEM
+  PRIVATE include/channel
   INTERFACE include/channel)
 
 target_link_libraries(filter_channel PUBLIC filter_base)
@@ -59,7 +59,7 @@ add_library(
 
 target_include_directories(
   filter_blur
-  PRIVATE include/blur SYSTEM
+  PRIVATE include/blur
   INTERFACE include/blur)
 
 target_link_libraries(filter_blur PUBLIC filter_base)
@@ -70,7 +70,7 @@ add_library(filter include/base_image_filter_factory.h
 
 target_include_directories(
   filter
-  PRIVATE include SYSTEM
+  PRIVATE include
   INTERFACE include)
 
 target_link_libraries(

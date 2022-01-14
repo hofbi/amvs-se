@@ -2,18 +2,9 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Supported versions ['melodic', 'noetic']
+# Supported versions ['noetic']
 # shellcheck disable=SC1091
-if [ "$(
-    . /etc/os-release
-    echo "$VERSION_ID"
-)" = "20.04" ]; then
-    ROS_VERSION='noetic'
-    PYTHON_SUFFIX=3
-else
-    PYTHON_SUFFIX=""
-    ROS_VERSION='melodic'
-fi
+ROS_VERSION='noetic'
 
 echo "Install dependencies for $ROS_VERSION"
 
@@ -24,11 +15,15 @@ sudo apt install -y \
     libavcodec-dev \
     libavformat-dev \
     libswscale-dev \
-    ffmpeg \
+    libavdevice-dev \
+    libavfilter-dev \
+    libavresample-dev \
     build-essential \
     libx264-dev \
     libva-dev \
     ros-"$ROS_VERSION"-opencv-apps \
-    nlohmann-json"$PYTHON_SUFFIX"-dev
+    nlohmann-json3-dev \
+    ffmpeg \
+    p7zip-full
 
 pip3 install -r "${SCRIPT_DIR}"/../requirements.txt

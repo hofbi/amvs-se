@@ -1,3 +1,12 @@
+# Models
+*.h5
+
+# Videos
+*.mp4
+*.yuv
+*.y4m
+*.bag
+
 # IDE
 .idea
 .vscode
@@ -46,3 +55,6 @@ cmake-build-*
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Python
+venv/

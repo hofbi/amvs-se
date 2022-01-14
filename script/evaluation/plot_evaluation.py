@@ -13,21 +13,8 @@ from tqdm import tqdm
 from plot_statistics import plot_data, clear_plot_data, AVERAGE_VALUES, MODE_KEY
 
 
-def main():
-    args = parse_args()
-
-    eval_path = Path(args.eval_path)
-    average_data, plot_path = read_average_data_from_eval_path(eval_path)
-
-    evaluate_average_data(args.filter, average_data)
-    calculate_average_diff_relative_to(average_data, args.anchor_row, plot_path)
-    plt.savefig(plot_path.joinpath("average"))
-
-    if args.show:
-        plt.show()
-
-
 def read_average_data_from_eval_path(eval_path: Path):
+    """Read average data from all files of the evaluation path"""
     if eval_path.is_file():
         if eval_path.suffix != ".csv":
             raise ValueError("Wrong file type. Expecting .csv")
@@ -44,6 +31,7 @@ def read_average_data_from_eval_path(eval_path: Path):
 
 
 def calculate_average_diff_relative_to(average_data, anchor_row_name, plot_path: Path):
+    """Calculate the diff of an anchor row relative to the average"""
     anchor_row = average_data.loc[average_data[MODE_KEY].str.contains(anchor_row_name)]
 
     if anchor_row.empty:
@@ -64,11 +52,13 @@ def calculate_average_diff_relative_to(average_data, anchor_row_name, plot_path:
 
 
 def exit_with_error(message):
+    """Print error and exit"""
     print(message, file=sys.stderr)
     sys.exit(1)
 
 
 def evaluate_average_data(filter_text, average_data):
+    """Evaluate on the average data"""
     print("\nEvaluating average values...")
     filtered_data = average_data.loc[average_data[MODE_KEY].str.contains(filter_text)]
 
@@ -76,6 +66,7 @@ def evaluate_average_data(filter_text, average_data):
 
 
 def get_average_data_from_values(eval_path: Path, average_values):
+    """Calculate average data from all measurements in the given path"""
     average_data = pd.DataFrame(average_values)
     average_data.sort_values(by=MODE_KEY, inplace=True)
     average_data.to_csv(eval_path.joinpath("average.csv"), header=True, index=False)
@@ -83,6 +74,7 @@ def get_average_data_from_values(eval_path: Path, average_values):
 
 
 def plot_average_data(filter_text, filtered_data):
+    """Plot average of all measurement results"""
     plt.figure("Single Encoder Filter Analysis", figsize=[19.2, 10.8])
 
     bitrate_header = [
@@ -128,16 +120,18 @@ def plot_average_data(filter_text, filtered_data):
 
 
 def add_subplot(plot_id, filtered_data, y_values, y_label):
-    ax = plt.subplot(plot_id)
-    filtered_data.plot(x=MODE_KEY, y=y_values, ax=ax).legend(
+    """Add subplot"""
+    subplot_ax = plt.subplot(plot_id)
+    filtered_data.plot(x=MODE_KEY, y=y_values, ax=subplot_ax).legend(
         loc="upper center", bbox_to_anchor=(0.5, -0.2), ncol=7
     )
     plt.ylabel(y_label)
 
 
 def evaluate_data(eval_path):
+    """Evaluate results for all json files in the given path"""
     average_values = []
-    for root, dirs, files in os.walk(eval_path):
+    for root, _, files in os.walk(eval_path):
         stats_files = [
             stats_file for stats_file in files if stats_file.endswith(".json")
         ]
@@ -152,6 +146,7 @@ def evaluate_data(eval_path):
 
 
 def parse_args():
+    """Parse CLI arguments"""
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -186,8 +181,20 @@ def parse_args():
     return parser.parse_args()
 
 
+def main():
+    """main"""
+    args = parse_args()
+
+    eval_path = Path(args.eval_path)
+    average_data, plot_path = read_average_data_from_eval_path(eval_path)
+
+    evaluate_average_data(args.filter, average_data)
+    calculate_average_diff_relative_to(average_data, args.anchor_row, plot_path)
+    plt.savefig(plot_path.joinpath("average"))
+
+    if args.show:
+        plt.show()
+
+
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        pass
+    main()

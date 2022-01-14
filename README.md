@@ -4,11 +4,29 @@
 [![Actions Status](https://github.com/hofbi/amvs-se/workflows/CodeQL/badge.svg)](https://github.com/hofbi/amvs-se)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Reference implementation for the experiments of Adaptive Multi-View Live Video Streaming for Teledriving Using a Single Hardware Encoder.
+Reference implementation for the experiments of
 
-## Paper
+* [Adaptive Multi-View Live Video Streaming for Teledriving Using a Single Hardware Encoder](#proof-of-concept)
+* [Preprocessor Rate Control for Adaptive Multi-View Live Video Streaming Using a Single Encoder](#filter-model)
 
-If you use this software please cite our paper.
+## Publications
+
+If you use this software please cite our publications:
+
+*Preprocessor Rate Control for Adaptive Multi-View Live Video Streaming Using a Single Encoder, Markus Hofbauer, Christopher B. Kuhn, Goran Petrovic, Eckehard Steinbach; TCSVT 2022* [PDF](https://www.researchgate.net/publication/357826860_Preprocessor_Rate_Control_for_Adaptive_Multi-View_Live_Video_Streaming_Using_a_Single_Encoder)
+
+```tex
+@article{hofbauer_preprocessor_rc,
+  author  = {Hofbauer, Markus and Kuhn, Christopher B. and Petrovic, Goran and Steinbach, Eckehard},
+  journal = {IEEE Transactions on Circuits and Systems for Video Technology},
+  title   = {Preprocessor Rate Control for Adaptive Multi-View Live Video Streaming Using a Single Encoder},
+  year    = {2022},
+  volume  = {},
+  number  = {},
+  pages   = {1-16},
+  doi     = {10.1109/TCSVT.2022.3142403}
+}
+```
 
 *Adaptive Multi-View Live Video Streaming for Teledriving Using a Single Hardware Encoder, Markus Hofbauer, Christopher B. Kuhn, Goran Petrovic, Eckehard Steinbach; ISM 2020* [PDF](https://www.researchgate.net/publication/345241096_Adaptive_Multi-View_Live_Video_Streaming_for_Teledriving_Using_a_Single_Hardware_Encoder)
 
@@ -29,10 +47,9 @@ If you use this software please cite our paper.
 
 This so far has been tested on
 
-| OS  | ROS Version |
-| --- | ----------- |
-| Ubuntu 18.04 | Melodic |
-| Ubuntu 20.04 | Noetic |
+| OS           | ROS Version |
+| ------------ | ----------- |
+| Ubuntu 20.04 | Noetic      |
 
 1. Install [ROS](http://wiki.ros.org/ROS/Installation) and [catkin_tools](https://catkin-tools.readthedocs.io/en/latest/installing.html#installing-catkin-tools)
 1. Create a workspace with e.g. `mkdir -p ~/catkin_ws/src && cd ~/catkin_ws/src`
@@ -41,7 +58,9 @@ This so far has been tested on
 1. Build the workspace: `catkin build`
 1. Source your workspace `source ~/catkin_ws_teleop/devel/setup.<your_shell>`
 
-## Run
+## Proof of Concept
+
+### Run
 
 This node is the first prototype implementation to verify the theoretical concept by encoding the data with different filters at Constant Quantization Parameter (CQP).
 
@@ -90,7 +109,7 @@ image_params:           # List of input topics (mux will place them next to each
   - ...
 ```
 
-## Evaluation
+### Evaluation
 
 ```shell
 roslaunch single_encoder single_encoder_validate.launch
@@ -98,17 +117,21 @@ roslaunch single_encoder single_encoder_validate.launch
 
 runs the single encoder launch file and plays a specified rosbag once.
 
-### Plot Statistics
+#### Plot Statistics
 
-This script is used to visualize the statistics produced from the node. Usage: `python3 plot_statistics.py -h`
+This script is used to visualize the statistics produced from the node. Usage: `python3 script/evaluation/plot_statistics.py -h`
 
-### Evaluation Runner
+#### Evaluation Runner
 
-The evaluation runner parses all settings files in a provided folder and runs the evaluation launch file with each of the settings and plots the statistics afterwards. The used json file and the figure saved as png will be stored into the provided folder. Usage: `python3 evaluation_runner.py -h`
+The evaluation runner parses all settings files in a provided folder and runs the evaluation launch file with each of the settings and plots the statistics afterwards. The used json file and the figure saved as png will be stored into the provided folder. Usage: `python3 script/evaluation/evaluation_runner.py -h`
 
-### Plot Evaluation
+#### Plot Evaluation
 
-Parse all json files in the provided folder, redraw the plots and save the output again as png. Further it calculates the `average.csv` file for all provided config files. This is useful if something at the plot script change but the data are still the same or to compare different filter types. Finally plots of the average data will be created based on the provided filter. Usage: `python3 plot_evaluation.py -h`
+Parse all json files in the provided folder, redraw the plots and save the output again as png. Further it calculates the `average.csv` file for all provided config files. This is useful if something at the plot script change but the data are still the same or to compare different filter types. Finally, plots of the average data will be created based on the provided filter. Usage: `python3 script/evaluation/plot_evaluation.py -h`
+
+## Preprocessor Model
+
+Preprocessor model for estimating the preprocessing filter parameter from given encoding parameters. Details in [script/cqp/README.md](script/cqp/README.md).
 
 ## Development
 

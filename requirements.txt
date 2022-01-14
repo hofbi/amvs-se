@@ -1,5 +1,5 @@
 matplotlib
-defusedxml
+tikzplotlib
 numpy
 black
 pylint
@@ -8,3 +8,7 @@ pandas
 scikit-learn
 tqdm
 shellcheck-py
+siti
+pyfakefs
+flake8
+opencv-python

@@ -14,6 +14,11 @@ argument-naming-style=snake_case
 # Maximum number of characters on a single line.
 max-line-length=120
 
+# Good variable names which should always be accepted, separated by a comma
+# These are variable name similar as used in the paper
+good-names=qp,r,f,SA,TA,QP,X,n,df,mu,nu,db,a,b,c,d,e,j,l,m,o,u,v,p,t,__SA,__TA,__X,x,sa,ta,
+    R_max,SCF,TCF,NCF,RCF,GCF,SDCF,MCF,pc,X_all,y
+
 [MESSAGES CONTROL]
 
 # Only show warnings with the listed confidence levels. Leave empty to show

@@ -3,7 +3,15 @@
 import unittest
 from unittest.mock import MagicMock
 
-from plot_evaluation import read_average_data_from_eval_path
+import sys
+from pathlib import Path
+
+try:
+    sys.path.append(str(Path(__file__).parents[2]))
+except IndexError:
+    pass
+
+from evaluation.plot_evaluation import read_average_data_from_eval_path
 
 
 class PlotEvaluationTest(unittest.TestCase):

@@ -1,9 +1,12 @@
 version: '3'
 services:
-  jupyter:
-    image: jupyter/scipy-notebook
+  keras-gpu-jupyter:
+    build:
+      context: ./
+      dockerfile: ../../docker/Dockerfile.keras-gpu-py37
+    runtime: nvidia
     volumes:
-      - ".:/work"
+      - ".:/tf/notebooks"
+      - "../cqp:/tf/cqp"
     ports:
       - "8888:8888"
-    command: jupyter notebook --ip 0.0.0.0

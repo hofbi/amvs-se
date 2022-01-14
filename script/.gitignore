@@ -1,6 +1,12 @@
 # Recordings
 stats*
 
+*.png
+*.csv
+*.tex
+*.pdf
+*.bmp
+
 *.swp
 
 # Byte-compiled / optimized / DLL files

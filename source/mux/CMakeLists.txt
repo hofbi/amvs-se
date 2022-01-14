@@ -4,7 +4,7 @@ add_library(
 
 target_include_directories(
   mux
-  PRIVATE include SYSTEM
+  PRIVATE include
   INTERFACE include)
 
 target_link_libraries(mux PUBLIC encoder decoder quality)

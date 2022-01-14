@@ -1,21 +1,28 @@
-"""Run evaluation on different encoder configurations"""
+"""Run ROS evaluation on different encoder configurations"""
 
 import argparse
 import os
 import time
 from pathlib import Path
 import subprocess
-from collections import namedtuple
+from dataclasses import dataclass
 from tqdm import tqdm
 
 from plot_statistics import plot_data, clear_plot_data
 from plot_evaluation import exit_with_error
 
 
-EvaluationParam = namedtuple("EvaluationParam", ["settings_path", "bag_path", "qp"])
+@dataclass
+class EvaluationParam:
+    """Evaluation parameter"""
+
+    settings_path: Path
+    bag_path: Path
+    qp: int
 
 
 def configure_launch_command(settings_path, bag_path, cbr_mode, qp, pb_rate):
+    """Configure the roslaunch command with arguments"""
     return (
         f"roslaunch single_encoder single_encoder_validate.launch "
         f"settings_path:={settings_path} "
@@ -27,6 +34,7 @@ def configure_launch_command(settings_path, bag_path, cbr_mode, qp, pb_rate):
 
 
 def run_single_encoder(roslaunch_cmd):
+    """Run a single roslaunch command as subprocess"""
     start = time.time()
     subprocess.call(roslaunch_cmd, shell=True)
     end = time.time()
@@ -35,19 +43,21 @@ def run_single_encoder(roslaunch_cmd):
 
 
 def add_param_to_stats_name(stats_file_name: Path, bag_name, qp):
+    """Add encoding parameter to filename"""
     return stats_file_name.with_name(
         "%s_%s_%s%s" % (bag_name, stats_file_name.stem, qp, stats_file_name.suffix)
     )
 
 
 def get_settings_paths(eval_dir):
+    """Return all settings yml files in eval dir"""
     settings_paths = []
     eval_path = Path(eval_dir)
 
     if eval_path.is_file():
         settings_paths.append(eval_path)
     elif eval_path.is_dir():
-        for root, dirs, files in os.walk(eval_dir):
+        for root, _, files in os.walk(eval_dir):
             for settings_file in files:
                 if settings_file.endswith(".yml"):
                     settings_paths.append(Path(root).joinpath(settings_file))
@@ -59,6 +69,7 @@ def get_settings_paths(eval_dir):
 
 
 def get_evaluation_params(bags, settings_paths, qps):
+    """Permutate all bags with all settings and QPs"""
     evaluation_params = []
     for bag in bags:
         for settings_path in settings_paths:
@@ -70,6 +81,7 @@ def get_evaluation_params(bags, settings_paths, qps):
 
 
 def parse_arguments():
+    """Parse CLI arguments"""
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -109,6 +121,7 @@ def parse_arguments():
 
 
 def main():
+    """main"""
     args = parse_arguments()
 
     stats_path = Path(args.stats)
@@ -131,7 +144,4 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        pass
+    main()

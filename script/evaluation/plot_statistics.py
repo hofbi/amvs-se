@@ -15,6 +15,7 @@ MODE_KEY = "mode"
 
 
 def summarize_individual_encodings(json_data, data_key):
+    """Sum up individual encoding values as comparision to MUX"""
     key_elements = [
         key_elements[data_key]
         for key_elements in itertools.islice(json_data, 0, len(json_data) - 1)
@@ -23,6 +24,7 @@ def summarize_individual_encodings(json_data, data_key):
 
 
 def add_individual_sum_to_data(json_data, data_key):
+    """Append summed up data to encoding results"""
     individual_sum = summarize_individual_encodings(json_data, data_key)
     sum_data = {
         "frame_count": list(range(1, len(individual_sum) + 1)),
@@ -33,6 +35,7 @@ def add_individual_sum_to_data(json_data, data_key):
 
 
 def calculate_ratio_for_key(json_data, data_key):
+    """Calculate ratio of individual encodings compared to sum for every key"""
     individual_sum = summarize_individual_encodings(json_data, data_key)
     ratio_key = data_key + "_ratio"
 
@@ -44,6 +47,7 @@ def calculate_ratio_for_key(json_data, data_key):
 
 
 def scale_values_of_key(json_data, data_key, scale_factor):
+    """Scale encoding values of a given key"""
     for element in json_data:
         element[data_key] = [x * scale_factor for x in element[data_key]]
 
@@ -51,6 +55,7 @@ def scale_values_of_key(json_data, data_key, scale_factor):
 
 
 def add_subplot(plot_id, data_key, json_data, label, unit):
+    """Add subplot"""
     plt.subplot(plot_id)
     plt.ylabel("%s [%s]" % (label, unit))
 
@@ -84,6 +89,7 @@ def add_subplot(plot_id, data_key, json_data, label, unit):
 
 
 def get_title_text(json_data):
+    """Create title text base on the configured encoders"""
     title_text = ""
     for element in itertools.islice(json_data, 0, len(json_data) - 1):
         title_text += "E-%d: %dx%dx%d-%s | " % (
@@ -98,6 +104,7 @@ def get_title_text(json_data):
 
 
 def shrink_data_to_equal_length(json_data):
+    """Cut all data to the length of the shortest"""
     min_length = min(len(element["frame_count"]) for element in json_data)
     for element in json_data:
         for key, value in element.items():
@@ -108,6 +115,7 @@ def shrink_data_to_equal_length(json_data):
 
 
 def create_figure(json_data):
+    """Create the overall figure"""
     plt.figure("Single Encoder Analysis", figsize=[19.2, 10.8])
 
     json_data = shrink_data_to_equal_length(json_data)
@@ -144,22 +152,19 @@ def create_figure(json_data):
     plt.subplots_adjust(hspace=0.75)
 
 
-def read_json(filename):
-    with open(filename) as json_file:
-        return json.load(json_file)
-
-
 def clear_plot_data():
+    """Clear all figure handles"""
     plt.clf()
     plt.close()
 
 
 def plot_data(file_name: Path, out_path: Path):
+    """Plot the data for a given result json"""
     file_path = get_file_path(file_name, out_path)
     AVERAGE_VALUES[MODE_KEY] = file_path.stem
     AVERAGE_VALUES["qp"] = file_path.stem[-2:]
 
-    json_data = read_json(file_name)
+    json_data = json.loads(file_name.read_text())
 
     create_figure(json_data)
     plt.savefig(file_path.with_suffix(""))
@@ -168,7 +173,8 @@ def plot_data(file_name: Path, out_path: Path):
         shutil.copy(str(file_name), str(file_path))
 
 
-def get_file_path(file_name: Path, out_path: Path):
+def get_file_path(file_name: Path, out_path: Path) -> Path:
+    """Resolve file path if output path is a dir or file"""
     if out_path.is_dir():
         file_path = out_path.joinpath(file_name.name)
     else:
@@ -177,6 +183,7 @@ def get_file_path(file_name: Path, out_path: Path):
 
 
 def main():
+    """main"""
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -201,7 +208,4 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        pass
+    main()

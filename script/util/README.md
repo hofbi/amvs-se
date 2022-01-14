@@ -47,7 +47,7 @@ The script will extend this config file with the metric columns `bitrate,ssim,ps
 
 Calculate spatial information (SI) and temporal information (TI) according to ITU-T P.910
 
-* https://github.com/Telecommunication-Telemedia-Assessment/SITI (C++)
+* [SITI C++](https://github.com/Telecommunication-Telemedia-Assessment/SITI)
 * Python package `siti`
 
 ## Converter

@@ -1,13 +1,13 @@
 """Common utilities for analytic and ml based bitrate model"""
 
 import math
+import warnings
+from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error
 from tqdm import tqdm
-from dataclasses import dataclass
-import warnings
 
 
 class KEYS:

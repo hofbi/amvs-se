@@ -1,10 +1,10 @@
 """Plot helper module tests"""
 
-import unittest
-from pyfakefs.fake_filesystem_unittest import TestCase
-
 import sys
+import unittest
 from pathlib import Path
+
+from pyfakefs.fake_filesystem_unittest import TestCase
 
 try:
     sys.path.append(str(Path(__file__).parents[2]))

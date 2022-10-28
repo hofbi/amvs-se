@@ -3,11 +3,11 @@ Video IO module for reading yuv videos
 """
 
 
-from pathlib import Path
-import numpy as np
 import sys
-import cv2
+from pathlib import Path
 
+import cv2
+import numpy as np
 
 try:
     sys.path.append(str(Path(__file__).absolute().parent))

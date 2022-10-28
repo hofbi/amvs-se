@@ -1,10 +1,10 @@
+jupyter
 matplotlib
-tikzplotlib
 numpy
+opencv-python
 pandas
 scikit-learn
-tqdm
-siti
-opencv-python
-jupyter
 scipy
+siti
+tikzplotlib
+tqdm

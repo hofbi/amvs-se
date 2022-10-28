@@ -15,10 +15,7 @@ try:
 except IndexError:
     pass
 
-from cqp.bitrate_model.util import (
-    KEYS,
-    get_expected_correction_factor,
-)
+from cqp.bitrate_model.util import KEYS, get_expected_correction_factor
 
 
 class BaseTrainer:

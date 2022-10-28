@@ -2,23 +2,24 @@
 Run ffmpeg encodings with gaussian preprocessing filter for a given video name
 """
 
-import sys
-from pathlib import Path
 import argparse
 import itertools
 import shutil
+import sys
+from dataclasses import asdict
+from pathlib import Path
+
 import pandas as pd
 from tqdm import tqdm
-from dataclasses import asdict
 
 try:
     sys.path.append(str(Path(__file__).absolute().parent))
 except IndexError:
     pass
 
-from model import EncodingParameterSet, CombinedStats
-from ffmpeg import create_video_config, encode, preprocess_videos
 from args import SettingsDictAction
+from ffmpeg import create_video_config, encode, preprocess_videos
+from model import CombinedStats, EncodingParameterSet
 
 
 def parse_arguments():
@@ -71,7 +72,7 @@ def main():
     ]
 
     df = pd.DataFrame(data=combined_stats)
-    df.to_csv(f"ffmpeg-results-{video_config['name']}.csv")
+    df.to_csv(f"ffmpeg-{settings.preprocessor.name}-{video_config['name']}.csv")
 
     shutil.rmtree(tmp_dir)
 

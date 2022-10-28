@@ -2,16 +2,24 @@
 Args helper for the ffmpeg experiments
 """
 
+import argparse
 import sys
 from pathlib import Path
-import argparse
 
 try:
     sys.path.append(str(Path(__file__).absolute().parent))
 except IndexError:
     pass
 
-from model import Settings, EncodingParameters
+from model import (
+    ColorQuantizationAdapter,
+    EncodingParameters,
+    GaussianPreprocessor,
+    JpegAdapter,
+    MedianPreprocessor,
+    NonePreprocessor,
+    Settings,
+)
 
 
 class SettingsDictAction(argparse.Action):
@@ -34,6 +42,28 @@ class SettingsDictAction(argparse.Action):
                 rate=[30, 15, 3],
             ),
             ffmpeg_config=lambda params: f"hevc_nvenc -g {params.gop_len} -qp {params.qp}",
+        ),
+        "x264-none": Settings(
+            parameter=EncodingParameters.create_bd_parameters(k_size=[1]),
+            preprocessor=NonePreprocessor(),
+        ),
+        "x264-gauss": Settings(
+            parameter=EncodingParameters.create_bd_parameters(
+                k_size=[3, 5], sigma=[0.5, 0.6, 0.7, 0.8, 1.0, 1.5]
+            ),
+            preprocessor=GaussianPreprocessor(),
+        ),
+        "x264-color": Settings(
+            parameter=EncodingParameters.create_bd_parameters(k_size=[8, 16]),
+            preprocessor=ColorQuantizationAdapter(),
+        ),
+        "x264-jpeg": Settings(
+            parameter=EncodingParameters.create_bd_parameters(k_size=[10, 20, 40, 60]),
+            preprocessor=JpegAdapter(),
+        ),
+        "x264-median": Settings(
+            parameter=EncodingParameters.create_bd_parameters(k_size=[3, 5, 7, 9]),
+            preprocessor=MedianPreprocessor(),
         ),
     }
 

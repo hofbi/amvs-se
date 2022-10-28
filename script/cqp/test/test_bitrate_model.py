@@ -1,9 +1,8 @@
 """Bitrate model tests"""
 
-import unittest
-
-import time
 import sys
+import time
+import unittest
 from pathlib import Path
 
 try:

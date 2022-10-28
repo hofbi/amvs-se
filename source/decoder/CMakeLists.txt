@@ -3,8 +3,7 @@ add_library(decoder include/video_decoder.h src/video_decoder.cpp
 
 target_include_directories(
   decoder
-  PRIVATE include
-  PRIVATE ${catkin_INCLUDE_DIRS} SYSTEM
+  PRIVATE include ${catkin_INCLUDE_DIRS}
   INTERFACE include)
 
 target_link_libraries(

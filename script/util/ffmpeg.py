@@ -6,15 +6,15 @@ ffmpeg wrapper for executing experiment commands
 # pylint: disable=C0103
 # Variable names should be similar as in the paper
 
-from subprocess import check_call, check_output
-from tqdm import tqdm
-from pathlib import Path
 import json
-import sys
-import cv2
 import re
-from typing import List, Dict
+import sys
+from pathlib import Path
+from subprocess import check_call, check_output
+from typing import Dict, List
 
+import pandas as pd
+from tqdm import tqdm
 
 try:
     sys.path.append(str(Path(__file__).absolute().parent))
@@ -51,9 +51,7 @@ def preprocess(
     while True:
         ret, frame = cap.read()
         if ret:
-            filtered_frame = cv2.GaussianBlur(
-                frame, (params.k_size, params.k_size), params.sigma
-            )
+            filtered_frame = settings.preprocessor.preprocess(frame, params)
             cap.write(filtered_frame)
         else:
             break
@@ -83,14 +81,12 @@ def encode(
     extension = get_filter_extension(params)
     out_video = create_output_video_path(settings, video_config)
     call(
-        (
-            "ffmpeg"
-            f" -s:v {settings.width}x{settings.height} -r {params.rate} -pix_fmt yuv420p"
-            f" -i {tmp_dir}/{video_config['name']}_{extension}.yuv"
-            f" -vf scale={params.resolution}"
-            f" -vcodec {settings.ffmpeg_config(params)}"
-            f" -y -hide_banner -loglevel panic {out_video}"
-        )
+        "ffmpeg"
+        f" -s:v {settings.width}x{settings.height} -r {params.rate} -pix_fmt yuv420p"
+        f" -i {tmp_dir}/{video_config['name']}_{extension}.yuv"
+        f" -vf scale={params.resolution}"
+        f" -vcodec {settings.ffmpeg_config(params)}"
+        f" -y -hide_banner -loglevel panic {out_video}"
     )
     stats = call_output(f"ffprobe -v error -print_format json -show_format {out_video}")
     format_stats = json.loads(stats)["format"]
@@ -132,11 +128,20 @@ def parse_resolution(resolution):
     return int(resolution[0]), int(resolution[1])
 
 
+def create_frame_level_stats(vmaf_data: Dict, frame_data: Dict) -> pd.DataFrame:
+    """Create statistics for every frame in the video sequence"""
+    vmaf_scores = [frame["VMAF_score"] for frame in vmaf_data["frames"]]
+    packet_sizes_byte = [frame["pkt_size"] for frame in frame_data["frames"]]
+    packet_sizes_kbit = [int(packet) * 8 / 1000 for packet in packet_sizes_byte]
+    return pd.DataFrame({"vmaf": vmaf_scores, "bitrate": packet_sizes_kbit})
+
+
 def calculate_quality_metrics(
     params: EncodingParameterSet,
     settings: Settings,
     video: Path,
     tmp_dir: Path,
+    mode_name: str,
 ) -> Dict[str, float]:
     """Calculate the given video quality metric of a video for given encoding parameter"""
     video_config = create_video_config(video, settings)
@@ -151,6 +156,10 @@ def calculate_quality_metrics(
         f' -lavfi "[0:v]scale={params.resolution}[main];[main][1:v]ssim;'
         f'[0:v]scale={params.resolution}[main];[main][1:v]psnr" -f null - 2>&1'
     )
+    frame_json = call_output(
+        f"ffprobe -v error -print_format json -show_frames {output_video_path}"
+    )
+    frame_data = json.loads(frame_json)
     distorted_yuv = convert_mp4_to_yuv(output_video_path)
     scaled_yuv = scale_yuv(
         video_config["path"], f"{settings.width}x{settings.height}", params.resolution
@@ -161,18 +170,24 @@ def calculate_quality_metrics(
         f"docker run --rm -v $(pwd):/files vmaf:latest yuv420p {width} {height}"
         f" /files/{scaled_yuv} /files/{distorted_yuv} --out-fmt json"
     )
+    vmaf_data = json.loads(vmaf_json)
+    stats_path = Path("frame_level_stats")
+    stats_path.mkdir(parents=True, exist_ok=True)
+    create_frame_level_stats(vmaf_data, frame_data).to_csv(
+        stats_path / f"{mode_name}-{params.name}.csv"
+    )
     return {
         "bitrate": int(stats.bitrate) * 0.001,  # Convert to kbit/s
         "psnr": parse_metric_score(output, "psnr"),
         "ssim": parse_metric_score(output, "ssim"),
-        "vmaf": json.loads(vmaf_json)["aggregate"]["VMAF_score"],
+        "vmaf": vmaf_data["aggregate"]["VMAF_score"],
     }
 
 
 def create_video_config(video: Path, settings: Settings) -> Dict:
     """Create video config with video specific parameter"""
     siti_output = call_output(
-        f"siti {video} --width {settings.width} --height {settings.height} -of json"
+        f"siti {video} --width {settings.width} --height {settings.height} -of json --full-range"
     )
     siti_dict = json.loads(siti_output)
     video_name = video.stem.replace(settings.extension, "")

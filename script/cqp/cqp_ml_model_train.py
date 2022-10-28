@@ -3,11 +3,11 @@
 import argparse
 import sys
 from pathlib import Path
+
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras import layers, optimizers, Sequential, callbacks
-
 from sklearn.preprocessing import StandardScaler
+from tensorflow.keras import Sequential, callbacks, layers, optimizers
 
 try:
     sys.path.append(str(Path().cwd().parent))
@@ -15,16 +15,15 @@ except IndexError:
     pass
 
 from cqp.bitrate_model.util import (
+    KEYS,
     DataFrameWrapper,
     MaxBitrateParameter,
-    parse_resolution,
-    read_df_by_keys,
-    KEYS,
-    get_rmse,
     get_pc,
+    get_rmse,
+    parse_resolution,
     print_rmse_normalized_rmse_and_pc,
+    read_df_by_keys,
 )
-
 
 MODEL_CHECKPOINT = "best.h5"
 

@@ -1,21 +1,22 @@
 """Preprocessor Model"""
 
+import itertools
 import sys
 from abc import ABCMeta, abstractmethod
 from pathlib import Path
-import itertools
-import pandas as pd
+
 import numpy as np
-from sklearn.preprocessing import StandardScaler
+import pandas as pd
 import tensorflow as tf
+from sklearn.preprocessing import StandardScaler
 
 try:
     sys.path.append(str(Path(__file__).parent.parent))
 except IndexError:
     pass
 
-from cqp.bitrate_model.util import parse_resolution, KEYS
 from cqp.bitrate_model.model import BitrateModel
+from cqp.bitrate_model.util import KEYS, parse_resolution
 
 
 class PreprocessorModel:

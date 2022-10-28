@@ -7,9 +7,10 @@ for model in glm_models:
     BITRATE_MODEL.a_st = model
 """
 
-import numpy as np
 import sys
 from pathlib import Path
+
+import numpy as np
 
 try:
     sys.path.append(str(Path(__file__).parent.parent))
@@ -18,15 +19,14 @@ except IndexError:
 
 from cqp.bitrate_model.model import ModelParameter
 from cqp.bitrate_model.trainer import (
-    RMaxTrainer,
-    SCFTrainer,
-    TCFTrainer,
+    GCFTrainer,
     NCFTrainer,
     RCFTrainer,
-    GCFTrainer,
+    RMaxTrainer,
+    SCFTrainer,
     SDCFTrainer,
+    TCFTrainer,
 )
-
 
 glm_models = [
     lambda param, SA, TA: param[0] * SA + param[1],

@@ -5,28 +5,29 @@ Fit a plane to estimate the kernel size of the preprocessing filter to compensat
 
 import argparse
 import sys
+from dataclasses import dataclass
 from itertools import cycle
 from pathlib import Path
 from statistics import mean
-from dataclasses import dataclass
-from typing import List, Callable
+from typing import Callable, List
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy.optimize import least_squares
 from scipy.stats import linregress
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error
-from tqdm import tqdm
-from scipy.optimize import least_squares
 from sklearn.model_selection import LeaveOneOut
+from tqdm import tqdm
 
 try:
     sys.path.append(str(Path(__file__).parent.parent))
 except IndexError:
     pass
 
-from evaluation.plot_statistics import MODE_KEY
 from cqp.bitrate_model.util import get_pc
+from evaluation.plot_statistics import MODE_KEY
 
 QP_KEY = "qp"
 BASE_KEY = "base"

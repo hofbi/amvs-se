@@ -15,8 +15,7 @@ add_library(
 
 target_include_directories(
   quality
-  PRIVATE include
-  PRIVATE ${OpenCV_INCLUDE_DIRS} SYSTEM
+  PRIVATE include ${OpenCV_INCLUDE_DIRS}
   INTERFACE include)
 
 target_link_libraries(quality PRIVATE ${OpenCV_LIBRARIES})

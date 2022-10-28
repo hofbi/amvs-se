@@ -6,6 +6,7 @@ import json
 import shutil
 import statistics
 from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import mean_absolute_error
@@ -57,7 +58,7 @@ def scale_values_of_key(json_data, data_key, scale_factor):
 def add_subplot(plot_id, data_key, json_data, label, unit):
     """Add subplot"""
     plt.subplot(plot_id)
-    plt.ylabel("%s [%s]" % (label, unit))
+    plt.ylabel(f"{label} [{unit}]")
 
     for element in json_data:
         if isinstance(element[data_key][0], list):

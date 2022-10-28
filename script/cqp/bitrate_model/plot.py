@@ -1,23 +1,19 @@
 """Plotting"""
 
 import sys
-import matplotlib.pyplot as plt
-import tikzplotlib
-import pandas as pd
-import numpy as np
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import tikzplotlib
 
 try:
     sys.path.append(str(Path(__file__).parent.parent))
 except IndexError:
     pass
 
-from cqp.bitrate_model.util import (
-    get_rmse,
-    get_pc,
-    get_normalized_bitrate,
-    KEYS,
-)
+from cqp.bitrate_model.util import KEYS, get_normalized_bitrate, get_pc, get_rmse
 
 
 def plot_sa_ta(ax_handle, df, video_keys, label, marker="o"):

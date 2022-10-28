@@ -2,10 +2,11 @@
 Run ffmpeg quality measurements for the application encoding parameter
 """
 
-import sys
-from pathlib import Path
 import argparse
 import shutil
+import sys
+from pathlib import Path
+
 import pandas as pd
 
 try:
@@ -13,9 +14,9 @@ try:
 except IndexError:
     pass
 
-from model import EncodingParameterSet
-from ffmpeg import calculate_quality_metrics
 from args import SettingsDictAction
+from ffmpeg import calculate_quality_metrics
+from model import EncodingParameterSet
 
 
 def parse_arguments():
@@ -59,23 +60,32 @@ def main():
     settings = args.mode
     tmp_dir = Path("tmp_quality")
 
-    df = pd.read_csv(args.config.name)
-    df["ep"] = df.apply(
-        create_encoding_parameter,
-        axis=1,
-    )
-    df[["bitrate", "psnr", "ssim", "vmaf"]] = df.apply(
-        lambda row: calculate_quality_metrics(
-            row.ep, settings, Path(f"{row.ep.name}{settings.extension}.yuv"), tmp_dir
-        ),
-        axis=1,
-        result_type="expand",
-    )
-    mean_quality_by_video_and_mode = df.groupby(["name", "mode"]).mean()
-    mean_quality_by_video_and_mode.to_csv("quality.csv", float_format="%.2f")
-    print(mean_quality_by_video_and_mode)
+    df_all = pd.read_csv(args.config.name)
+    for k_size, sigma in df_all.groupby(["k_size", "sigma"]).groups.keys():
+        df = df_all.loc[(df_all.k_size == k_size) & (df_all.sigma == sigma)]
+        df["ep"] = df.apply(
+            create_encoding_parameter,
+            axis=1,
+        )
+        df[["bitrate", "psnr", "ssim", "vmaf"]] = df.apply(
+            lambda row: calculate_quality_metrics(
+                row.ep,
+                settings,
+                Path(f"{row.ep.name}{settings.extension}.yuv"),
+                tmp_dir,
+                str(row["mode"]),
+            ),
+            axis=1,
+            result_type="expand",
+        )
+        mean_quality_by_video_and_mode = df.groupby(["name", "mode"]).mean()
+        mean_quality_by_video_and_mode.to_csv(
+            f"quality-{settings.preprocessor.name}-{k_size}-{str(sigma).replace('.', '')}.csv",
+            float_format="%.2f",
+        )
+        print(mean_quality_by_video_and_mode)
 
-    shutil.rmtree(tmp_dir)
+        shutil.rmtree(tmp_dir)
 
 
 if __name__ == "__main__":

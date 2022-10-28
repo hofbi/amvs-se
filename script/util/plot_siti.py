@@ -3,12 +3,12 @@ Plot siti over time for all videos
 """
 
 import argparse
-from pathlib import Path
-from subprocess import check_output
 import json
 import sys
-import matplotlib.pyplot as plt
+from pathlib import Path
+from subprocess import check_output
 
+import matplotlib.pyplot as plt
 
 WIDTH = 352
 HEIGHT = 288

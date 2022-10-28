@@ -31,15 +31,32 @@ If you use this software please cite our publications:
 *Adaptive Multi-View Live Video Streaming for Teledriving Using a Single Hardware Encoder, Markus Hofbauer, Christopher B. Kuhn, Goran Petrovic, Eckehard Steinbach; ISM 2020* [PDF](https://www.researchgate.net/publication/345241096_Adaptive_Multi-View_Live_Video_Streaming_for_Teledriving_Using_a_Single_Hardware_Encoder)
 
 ```tex
-@inproceedings{hofbauer_2020,
-    title = {Adaptive Multi-View Live Video Streaming for Teledriving Using a Single Hardware Encoder},
-    booktitle = {22nd IEEE International Symposium on Multimedia (ISM)},
-    publisher = {IEEE},
-    author = {Hofbauer, Markus and Kuhn, Christopher B. and Petrovic, Goran and Steinbach, Eckehard},
-    address = {Naples, Italy}
-    month = dec,
-    year = {2020},
-    pages = {1--8},
+@inproceedings{hofbauer_single_encoder,
+  author    = {Hofbauer, Markus and Kuhn, Christopher and Petrovic, Goran and Steinbach, Eckehard},
+  booktitle = {2020 IEEE International Symposium on Multimedia (ISM)},
+  title     = {Adaptive Multi-View Live Video Streaming for Teledriving Using a Single Hardware Encoder},
+  year      = {2020},
+  volume    = {},
+  number    = {},
+  pages     = {9-16},
+  address   = {Naples, Italy},
+  doi       = {10.1109/ISM.2020.00008}
+}
+```
+
+*Measuring the Influence of Image Preprocessing on the Rate-Distortion Performance of Video Encoding, Markus Hofbauer, Christopher B. Kuhn, Goran Petrovic, Eckehard Steinbach; ISM 2022* [PDF](https://www.researchgate.net/publication/)
+
+```tex
+@inproceedings{hofbauer_preprocessor_evaluation,
+  author    = {Hofbauer, Markus and Kuhn, Christopher and Petrovic, Goran and Steinbach, Eckehard},
+  booktitle = {24th 2022 IEEE International Symposium on Multimedia (ISM)},
+  title     = {Measuring the Influence of Image Preprocessing on the Rate-Distortion Performance of Video Encoding},
+  year      = {2022},
+  volume    = {},
+  number    = {},
+  pages     = {},
+  address   = {Naples, Italy},
+  doi       = {}
 }
 ```
 
@@ -139,19 +156,28 @@ To install the additional tools required for the development, call
 
 ```shell
 python3 -m pip install -r requirements.txt
-sudo apt install -y clang-format
+sudo apt install -y clang-format clang-tidy-10
 sudo snap install shfmt
 ```
 
-from the source of this directory. Then, you can call
+### pre-commit git hooks
 
-```shell
-# Fomrat the code
-make format
+We use [pre-commit](https://pre-commit.com/) to manage our git pre-commit hooks.
+`pre-commit` is automatically installed from `requirements.txt`.
+To set it up, call
 
-# Check format
-make check_format
+```sh
+git config --unset-all core.hooksPath  # may fail if you don't have any hooks set, but that's ok
+pre-commit install --overwrite
+```
 
-# Pylint
-make pylint
+#### Usage
+
+With `pre-commit`, you don't use your linters/formatters directly anymore, but through `pre-commit`:
+
+```sh
+pre-commit run --file path/to/file1.cpp tools/second_file.py  # run on specific file(s)
+pre-commit run --all-files  # run on all files tracked by git
+pre-commit run --from-ref origin/master --to-ref HEAD  # run on all files changed on current branch, compared to master
+pre-commit run <hook_id> --file <path_to_file>  # run specific hook on specific file
 ```

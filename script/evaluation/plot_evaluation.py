@@ -1,16 +1,16 @@
 """Plot statistics for all stats files in the folder and summarize"""
 
 import argparse
-import re
-import sys
 import copy
 import os
+import re
+import sys
 from pathlib import Path
-import pandas as pd
-import matplotlib.pyplot as plt
-from tqdm import tqdm
 
-from plot_statistics import plot_data, clear_plot_data, AVERAGE_VALUES, MODE_KEY
+import matplotlib.pyplot as plt
+import pandas as pd
+from plot_statistics import AVERAGE_VALUES, MODE_KEY, clear_plot_data, plot_data
+from tqdm import tqdm
 
 
 def read_average_data_from_eval_path(eval_path: Path):

@@ -2,14 +2,14 @@
 
 import argparse
 import os
-import time
-from pathlib import Path
 import subprocess
+import time
 from dataclasses import dataclass
-from tqdm import tqdm
+from pathlib import Path
 
-from plot_statistics import plot_data, clear_plot_data
 from plot_evaluation import exit_with_error
+from plot_statistics import clear_plot_data, plot_data
+from tqdm import tqdm
 
 
 @dataclass
@@ -45,7 +45,7 @@ def run_single_encoder(roslaunch_cmd):
 def add_param_to_stats_name(stats_file_name: Path, bag_name, qp):
     """Add encoding parameter to filename"""
     return stats_file_name.with_name(
-        "%s_%s_%s%s" % (bag_name, stats_file_name.stem, qp, stats_file_name.suffix)
+        f"{bag_name}_{stats_file_name.stem}_{qp}{stats_file_name.suffix}"
     )
 
 
@@ -140,7 +140,7 @@ def main():
         )
         plot_data(stats_path, out_path)
         clear_plot_data()
-        pbar.set_description("Finished %s in %.2fs" % (out_path.stem, runtime))
+        pbar.set_description(f"Finished {out_path.stem} in {runtime:.2f}s")
 
 
 if __name__ == "__main__":

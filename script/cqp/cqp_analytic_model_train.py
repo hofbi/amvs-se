@@ -1,9 +1,10 @@
 """Train parameter for CQP analytic bitrate model"""
 
 import argparse
-import sys
 import statistics
+import sys
 from pathlib import Path
+
 import numpy as np
 import pandas as pd
 
@@ -12,32 +13,30 @@ try:
 except IndexError:
     pass
 
-from cqp.bitrate_model.util import (
-    KEYS,
-    DataFrameWrapper,
-    read_df_by_keys,
-    get_rmse,
-    get_pc,
-    print_rmse_and_pc,
-    print_rmse_normalized_rmse_and_pc,
-)
-
-
 from cqp.bitrate_model.model import (
-    ModelParameter,
     BitrateModel,
     LottermannBitrateModel1,
     LottermannBitrateModel2,
     MaBitrateModel,
+    ModelParameter,
 )
 from cqp.bitrate_model.trainer import (
-    RMaxTrainer,
-    SCFTrainer,
-    TCFTrainer,
+    GCFTrainer,
     NCFTrainer,
     RCFTrainer,
-    GCFTrainer,
+    RMaxTrainer,
+    SCFTrainer,
     SDCFTrainer,
+    TCFTrainer,
+)
+from cqp.bitrate_model.util import (
+    KEYS,
+    DataFrameWrapper,
+    get_pc,
+    get_rmse,
+    print_rmse_and_pc,
+    print_rmse_normalized_rmse_and_pc,
+    read_df_by_keys,
 )
 
 

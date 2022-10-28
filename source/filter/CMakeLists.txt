@@ -13,10 +13,8 @@ add_library(filter_base include/base/base_image_filter.h
 
 target_include_directories(
   filter_base
-  PRIVATE include/base
-  PRIVATE ${catkin_INCLUDE_DIRS} SYSTEM
-  INTERFACE include/base
-  INTERFACE ${catkin_INCLUDE_DIRS} SYSTEM)
+  PRIVATE include/base ${catkin_INCLUDE_DIRS}
+  INTERFACE include/base ${catkin_INCLUDE_DIRS})
 
 # Filter Spatio-Temporal
 add_library(
@@ -29,10 +27,8 @@ target_include_directories(
   PRIVATE include/spatio_temporal
   INTERFACE include/spatio_temporal)
 
-target_link_libraries(
-  filter_spatio_temporal
-  PUBLIC filter_base
-  PUBLIC ${catkin_LIBRARIES})
+target_link_libraries(filter_spatio_temporal PUBLIC filter_base
+                                                    ${catkin_LIBRARIES})
 
 # Filter Channel
 add_library(filter_channel include/channel/channel_filter.h

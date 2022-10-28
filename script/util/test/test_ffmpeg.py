@@ -1,7 +1,7 @@
 """FFMPEG Wrapper Test"""
 
-import unittest
 import sys
+import unittest
 from pathlib import Path
 
 try:

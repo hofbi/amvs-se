@@ -1,0 +1,3 @@
+[submodule "script/external/bjontegaard_metrics"]
+	path = script/external/bjontegaard_metrics
+	url = https://github.com/jascenso/bjontegaard_metrics.git

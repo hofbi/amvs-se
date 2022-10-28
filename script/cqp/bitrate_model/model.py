@@ -1,9 +1,10 @@
 """Analytic bitrate model"""
 
 import sys
-from pathlib import Path
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import List
+
 import numpy as np
 
 try:
@@ -11,10 +12,7 @@ try:
 except IndexError:
     pass
 
-from cqp.bitrate_model.util import (
-    parse_resolution,
-    MaxBitrateParameter,
-)
+from cqp.bitrate_model.util import MaxBitrateParameter, parse_resolution
 
 
 @dataclass

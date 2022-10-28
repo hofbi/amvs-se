@@ -1,10 +1,9 @@
 """Plot evaluation tests"""
 
-import unittest
-from unittest.mock import MagicMock
-
 import sys
+import unittest
 from pathlib import Path
+from unittest.mock import MagicMock
 
 try:
     sys.path.append(str(Path(__file__).parents[2]))

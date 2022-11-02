@@ -26,23 +26,6 @@ jobs:
         pre-commit run --all-files
         make check
 
-  super-lint:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Lint Code Base
-      uses: docker://github/super-linter:v4.8.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        VALIDATE_BASH: false # Already configured in check
-        VALIDATE_CPP: false
-        VALIDATE_DOCKERFILE_HADOLINT: false
-        VALIDATE_GITHUB_ACTIONS: false
-        VALIDATE_PYTHON_BLACK: false  # Already configured in check
-        VALIDATE_PYTHON_FLAKE8: false  # Already configured in check
-        VALIDATE_PYTHON_PYLINT: false  # Already configured in check
-        VALIDATE_PYTHON_ISORT: false
-
   ros:
     runs-on: ubuntu-latest
     container:
@@ -56,7 +39,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y python3-catkin-tools clang-tidy-10
-        $GITHUB_WORKSPACE/install.sh
+        $GITHUB_WORKSPACE/script/install.sh
     - name: Init Workspace
       run: |
         mkdir -p $GITHUB_WORKSPACE/../catkin_ws/src
